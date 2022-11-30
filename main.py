@@ -27,15 +27,18 @@ class MainWindow(QMainWindow):
         button2 = QPushButton("좌우반전")
         button3 = QPushButton("새로고침")
         button4 = QPushButton("흑백")
+        button5 = QPushButton("상하반전")
         button1.clicked.connect(self.show_file_dialog)
         button2.clicked.connect(self.flip_image)
         button3.clicked.connect(self.clear_label)
         button4.clicked.connect(self.gray_image)
+        button5.clicked.connect(self.updown_image)
         sidebar.addWidget(button1)
         sidebar.addWidget(button2)
         sidebar.addWidget(button3)
         sidebar.addWidget(button4)
-
+        sidebar.addWidget(button5)
+        
         main_layout.addLayout(sidebar)
 
         self.label1 = QLabel(self)
@@ -80,7 +83,18 @@ class MainWindow(QMainWindow):
         )
         pixmap = QPixmap(image)
         self.label2.setPixmap(pixmap)
-   
+     #상하반전
+    def updown_image(self):
+        image = cv2.flip(self.image, 0)
+        h, w, _ = image.shape
+        bytes_per_line = 3 * w
+        image = QImage(
+            image.data, w, h, bytes_per_line, QImage.Format_RGB888
+        ).rgbSwapped()
+        pixmap = QPixmap(image)
+        self.label2.setPixmap(pixmap)   
+    
+
     def clear_label(self):
         self.label2.clear()
 
